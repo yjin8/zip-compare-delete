@@ -3,7 +3,28 @@ import os
 import zipfile
 
 #7/23/18 - need to make it easier to modify the script for different months?
-#7/23/18 - 
+#7/23/18 - write the functions to compare zip + orig files and then delete orig files
+
+filePath1 = 'Z:\\syslog\\PIX-SF\\2018-05-01'
+filePath2 = 'U:\\PIX-SF\\2018-05\\2018-05-01.zip'
+
+#zip_files needs testing!!!
+def zip_files(orig_path, zip_path):
+	"""
+	Zips files into a new directory
+	:param orig_path: path to folder to be zipped in string format
+	:param zip_path: path to new zipped folder in string format
+
+	"""
+	zip_location = zipfile.ZipFile(zip_path, 'w')
+	for folder, subfolders, files in os.walk(orig_path):
+		for file in files:
+			zip_location.write(
+				os.path.join(folder,file), 
+				os.path.relpath(os.path.join(folder,file), orig_path),
+				compress_type = zipfile.ZIP_DEFLATED
+				)
+	zip_location.close()
 
 def get_zipped_files(file_path):
 	"""
@@ -41,8 +62,6 @@ def get_orig_files(file_path):
 	return orig_files
 	#print(len(orig_files))
 
-filePath1 = 'Z:\\syslog\\PIX-SF\\2018-05-01'
-filePath2 = 'U:\\PIX-SF\\2018-05\\2018-05-01.zip'
 print("ORIGINAL FILES")
 print(get_orig_files(filePath1))
 print("ZIPPED FILES")
