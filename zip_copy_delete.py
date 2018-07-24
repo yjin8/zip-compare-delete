@@ -41,7 +41,7 @@ def get_zipped_files(file_path):
 	"""
 	zf = zipfile.ZipFile(file_path)
 	#zf: an object created from the zipped files
-	#print(zf.infolist()[1:])
+	#print(zf.infolist([)1:])
 
 	zipped_files = {}
 
@@ -74,10 +74,21 @@ def get_orig_files(file_path):
 
 '''
 
+def get_common_files(dict0, dict1):
+	common_files = dict0.items() & dict1.items()
+	return common_files
+
 #print("ORIGINAL FILES")
 #print(get_orig_files(filePath1))
-print("ZIPPED FILES")
-print(get_zipped_files(filePath2))
+#print("ZIPPED FILES")
+#print(get_zipped_files(filePath2))
+
+a = get_orig_files(filePath1)
+b = get_zipped_files(filePath2)
+print(len(a))
+print(len(b))
+
+#print(get_common_files(a,b))
 
 
 #-------------------------------------------------------------------#
