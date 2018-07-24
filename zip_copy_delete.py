@@ -1,37 +1,24 @@
-#import filecmp
 import os
 import zipfile
 from zipfile import ZipFile
 
 #7/23/18 - need to make it easier to modify the script for different months?
 #7/23/18 - need write the functions to compare zip + orig files and then delete orig files
+#7/24/18 - wrote a simplified function for zipping files
+#7/24/18 - still need to write function to delete files --> using functional programmning
+#		   to filter the files in a specific time frame and then applying a zip function to it
+#		   in other words, applyin map to a filter function (using lambda)
 
 
 filePath1 = 'Z:\\syslog\\PIX-SF\\2018-05-01'
 filePath2 = 'U:\\PIX-SF\\2018-05\\2018-05-01.zip'
 
 #zip_files needs testing
-def zip_files(orig_path, zip_path):
-	"""
-	Zips files into a new directory
-	:param orig_path: path to folder to be zipped in string format
-	:param zip_path: path to new zipped folder in string format
+def zip_files(orig_path,zip_path):
 
-	"""
-	    # initializing empty file paths list
-	file_paths_list = []
- 
-    # crawling through directory and subdirectories
-	for root, directories, files in os.walk(orig_path):
-		for filename in files:
-			# join the two strings in order to form the full filepath.
-			filepath = os.path.join(root, filename)
-			file_paths_list.append(filepath)
-			
-    #return file_paths 
-	with ZipFile(zip_path, 'w') as zip:
-		for file in file_paths_list:
-			zip.write(file, arcname=basename(file), compress_type = zipfile.ZIP_DEFLATED)
+	shutil.make_archive(zip_path,'zip',orig_path) 
+	#zip_path: e.g. 'U:\\PIX-SF\\2018-05\\2018-05-01' (don't include '.zip' at end of first arg)
+
 
 def get_zipped_files(file_path):
 	"""
@@ -80,12 +67,12 @@ def get_common_files(dict0, dict1):
 
 #print("ORIGINAL FILES")
 #print(get_orig_files(filePath1))
-#print("ZIPPED FILES")
-#print(get_zipped_files(filePath2))
+print("ZIPPED FILES")
+print(get_zipped_files(filePath2))
 
-a = get_orig_files(filePath1)
+#a = get_orig_files(filePath1)
 b = get_zipped_files(filePath2)
-print(len(a))
+#print(len(a))
 print(len(b))
 
 #print(get_common_files(a,b))

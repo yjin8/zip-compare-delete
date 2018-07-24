@@ -48,13 +48,11 @@ def zip_files(orig_path, zip_path):
 
 #zip_files(filePath1,filePath2)
 
-'''
+
 def zip_files_1(orig_path,zip_path):
-	shutil.make_archive('work',
-						'zip',
-						zip_path,
-						orig_path)
+	shutil.make_archive(zip_path,'zip',orig_path)
 
 zip_files_1(filePath1,filePath2)
-'''
-shutil.make_archive('work','zip','H:','H:\\Documents\\work')
+
+
+#shutil.make_archive('H:/coding practice/work','zip','H:/Documents/work')
