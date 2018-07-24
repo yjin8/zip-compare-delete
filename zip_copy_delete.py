@@ -1,9 +1,11 @@
 #import filecmp
 import os
 import zipfile
+from zipfile import ZipFile
 
 #7/23/18 - need to make it easier to modify the script for different months?
 #7/23/18 - need write the functions to compare zip + orig files and then delete orig files
+
 
 filePath1 = 'Z:\\syslog\\PIX-SF\\2018-05-01'
 filePath2 = 'U:\\PIX-SF\\2018-05\\2018-05-01.zip'
@@ -16,15 +18,20 @@ def zip_files(orig_path, zip_path):
 	:param zip_path: path to new zipped folder in string format
 
 	"""
-	zip_location = zipfile.ZipFile(zip_path, 'w')
-	for folder, subfolders, files in os.walk(orig_path):
-		for file in files:
-			zip_location.write(
-				os.path.join(folder,file), 
-				os.path.relpath(os.path.join(folder,file), orig_path),
-				compress_type = zipfile.ZIP_DEFLATED
-				)
-	zip_location.close()
+	    # initializing empty file paths list
+	file_paths_list = []
+ 
+    # crawling through directory and subdirectories
+	for root, directories, files in os.walk(orig_path):
+		for filename in files:
+			# join the two strings in order to form the full filepath.
+			filepath = os.path.join(root, filename)
+			file_paths_list.append(filepath)
+			
+    #return file_paths 
+	with ZipFile(zip_path, 'w') as zip:
+		for file in file_paths_list:
+			zip.write(file, arcname=basename(file), compress_type = zipfile.ZIP_DEFLATED)
 
 def get_zipped_files(file_path):
 	"""
@@ -42,8 +49,6 @@ def get_zipped_files(file_path):
 		zipped_files[info.filename] = info.file_size
 		#print('\File Name\t', info.filename)
 		#print( '\tUncompressed\t', info.file_size, 'bytes')
-
-	#print(len(zipped_files))
 	return zipped_files
 
 
@@ -54,16 +59,23 @@ def get_orig_files(file_path):
 	:param file_path: path to original folder in string format
 	"""
 	orig_files = {}
+	for root, directories, files in os.walk(file_path):
+		for filename in files:
+            # join the two strings in order to form the full filepath.
+			filepath = os.path.join(root, filename)
+			orig_files[filename] = os.path.getsize(filepath)
+            #file_paths.append(filepath)
+	return orig_files
 
+'''
 	for file in os.listdir(file_path):
 		#print(os.path.getsize(filePath1 + '\\' + file))
 		orig_files[file] = os.path.getsize(file_path + '\\' + file)
 
-	return orig_files
-	#print(len(orig_files))
+'''
 
-print("ORIGINAL FILES")
-print(get_orig_files(filePath1))
+#print("ORIGINAL FILES")
+#print(get_orig_files(filePath1))
 print("ZIPPED FILES")
 print(get_zipped_files(filePath2))
 
