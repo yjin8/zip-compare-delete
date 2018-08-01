@@ -8,13 +8,19 @@ from zipfile import ZipFile
 #7/24/18 - still need to write function to delete files --> using functional programmning
 #		   to filter the files in a specific time frame and then applying a zip function to it
 #		   in other words, applyin map to a filter function (using lambda)
-
+#7/25/18 - figure out path string formating (.zip or not at end)
 
 filePath1 = 'Z:\\syslog\\PIX-SF\\2018-05-01'
 filePath2 = 'U:\\PIX-SF\\2018-05\\2018-05-01.zip'
 
-#zip_files needs testing
+#-------------------------------------------------------#
+#
+
 def zip_files(orig_path,zip_path):
+	"""
+	:param orig_path: the location of the file that needs to be zipped
+	:param zip_path: the path of the root directory of your zipped files
+	"""
 
 	shutil.make_archive(zip_path,'zip',orig_path) 
 	#zip_path: e.g. 'U:\\PIX-SF\\2018-05\\2018-05-01' (don't include '.zip' at end of first arg)
@@ -100,3 +106,5 @@ print(mismatch)
 print("errors:")
 print(errors)
 '''
+def compare_delete(path1,path2):
+	

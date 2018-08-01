@@ -50,7 +50,7 @@ def zip_files(orig_path, zip_path):
 
 
 def zip_files_1(orig_path,zip_path):
-	shutil.make_archive(zip_path,'zip',orig_path)
+	shutil.make_archive(zip_path,'zip',orig_path) #
 
 zip_files_1(filePath1,filePath2)
 
