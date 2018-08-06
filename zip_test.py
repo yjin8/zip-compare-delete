@@ -4,8 +4,8 @@ from zipfile import ZipFile
 import zipfile
 import shutil
 
-filePath1 = 'H:\\Documents\\work'
-filePath2 = 'H:\\work'
+filePath0 = 'H:/Documents/work/guestwifi'
+filePath2 = 'H:/Documents/testing/guestwifi.zip'
 '''
 def get_all_file_paths(file_path):
  
@@ -52,7 +52,30 @@ def zip_files(orig_path, zip_path):
 def zip_files_1(orig_path,zip_path):
 	shutil.make_archive(zip_path,'zip',orig_path) #
 
-zip_files_1(filePath1,filePath2)
+#zip_files_1(filePath1,filePath2)
 
 
 #shutil.make_archive('H:/coding practice/work','zip','H:/Documents/work')
+
+def get_zipped_files(file_path):
+	"""
+	Constructs a dictionary with (fileName:fileSize) key:value pairs
+
+	:param file_path: path to zipped folder in string format
+	"""
+	zf = zipfile.ZipFile(file_path)
+	#zf: an object created from the zipped files
+	#print(zf.infolist([)1:])
+
+	zipped_files = {}
+	#print(zf.getinfo())
+	
+	for info in zf.infolist():#info: the attributes of all the files in the zf objects
+		print(info)
+		zipped_files[info.filename] = info.file_size
+		print('\tFile Name\t', info.filename)
+		print( '\tUncompressed\t', info.file_size, 'bytes')
+	return zipped_files
+
+
+print(get_zipped_files(filePath2))

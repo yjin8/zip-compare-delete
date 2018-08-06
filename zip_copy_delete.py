@@ -1,3 +1,4 @@
+import shutil
 import os
 import zipfile
 from zipfile import ZipFile
@@ -10,8 +11,10 @@ from zipfile import ZipFile
 #		   in other words, applyin map to a filter function (using lambda)
 #7/25/18 - figure out path string formating (.zip or not at end)
 
-filePath1 = 'Z:\\syslog\\PIX-SF\\2018-05-01'
-filePath2 = 'U:\\PIX-SF\\2018-05\\2018-05-01.zip'
+filePath0 = 'H:/Documents/guestwifi'
+filePath1 = 'H:/Documents/coding practice'
+filePath2 = 'H:/Documents/testing/guestwifi.zip'
+filePath3 = 'H:/Documents/testing/coding practice.zip'
 
 #-------------------------------------------------------#
 #
@@ -21,29 +24,30 @@ def zip_files(orig_path,zip_path):
 	:param orig_path: the location of the file that needs to be zipped
 	:param zip_path: the path of the root directory of your zipped files
 	"""
-
-	shutil.make_archive(zip_path,'zip',orig_path) 
+	shutil.make_archive(zip_path[:-4],'zip',orig_path) 
 	#zip_path: e.g. 'U:\\PIX-SF\\2018-05\\2018-05-01' (don't include '.zip' at end of first arg)
 
+#zip_files(filePath0,filePath2)
 
 def get_zipped_files(file_path):
 	"""
 	Constructs a dictionary with (fileName:fileSize) key:value pairs
 
-	:param file_path: path to zipped folder in string format
+	:param file_path: path to zipped folder in string format, including the .zip at end
 	"""
 	zf = zipfile.ZipFile(file_path)
 	#zf: an object created from the zipped files
-	#print(zf.infolist([)1:])
 
 	zipped_files = {}
 
-	for info in zf.infolist()[1:]:#info: the attributes of all the files in the zf objects
+	for info in zf.infolist():#info: the attributes of all the files in the zf objects
 		zipped_files[info.filename] = info.file_size
 		#print('\File Name\t', info.filename)
 		#print( '\tUncompressed\t', info.file_size, 'bytes')
 	return zipped_files
 
+print("ZIPPED FILES---------------------------")
+print(get_zipped_files(filePath2))
 
 def get_orig_files(file_path):
 	"""
@@ -60,51 +64,34 @@ def get_orig_files(file_path):
             #file_paths.append(filepath)
 	return orig_files
 
+print("ORIG FILES--------------------------------")
+print(get_orig_files(filePath0))
+
 '''
 	for file in os.listdir(file_path):
 		#print(os.path.getsize(filePath1 + '\\' + file))
 		orig_files[file] = os.path.getsize(file_path + '\\' + file)
 
-'''
 
-def get_common_files(dict0, dict1):
-	common_files = dict0.items() & dict1.items()
-	return common_files
-
-#print("ORIGINAL FILES")
-#print(get_orig_files(filePath1))
-print("ZIPPED FILES")
-print(get_zipped_files(filePath2))
-
-#a = get_orig_files(filePath1)
-b = get_zipped_files(filePath2)
-#print(len(a))
-print(len(b))
-
-#print(get_common_files(a,b))
-
-
-#-------------------------------------------------------------------#
-# filecmp method of comparing directories, not sure if it's capable #
-# of comparing files from a zipped folder and a regular folder      #
-#-------------------------------------------------------------------#
+map(lambda x: os.remove(x), get_common_files(d0,d1))
 
 '''
-d2_contents = [info.filename for info in zf.infolist()[1:]]
-print("list contents:")
-print(d2_contents)
 
-d1_contents = os.listdir(filePath1)
-print("list contents:")
-print(d1_contents)
+def compare_delete(orig_path, zipped_path):
+	dict_orig = get_orig_files(orig_path)
+	dict_zipped = get_zipped_files(zipped_path)
+	to_delete = []
+	for key in dict_orig:
+		if key not in dict_zipped:
+			continue
+		elif dict_orig[key]==dict_zipped[key]:
+			to_delete.append(key)
+	for root, directories,files in os.walk(orig_path):
+		for filename in to_delete:
+			filepath = os.path.join(root, filename)
+			print(filepath)
+			#os.remove(filepath)
+	#os.rmdir(orig_path)
+	return to_delete
 
-match, mismatch, errors = filecmp.cmpfiles(filePath1, filePath2, d2_contents,shallow = True)
-print("matches:")
-print(match)
-print("mismatches:")
-print(mismatch)
-print("errors:")
-print(errors)
-'''
-def compare_delete(path1,path2):
-	
+print(compare_delete(filePath0,filePath2))

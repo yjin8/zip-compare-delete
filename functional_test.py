@@ -8,8 +8,8 @@ zipped_files = [1,3,5,9]
 
 #filtered_list = list(filter(lambda x: zipping(x), zipped_files))
 #print(filtered_list)
-
 '''
+
 a = []
 for root, directories, files in os.walk('H:/Documents/work'):
 	for filename in files:
@@ -22,20 +22,26 @@ for root,directories,files in os.walk('H:/Documents/work'):
 	for filename in a:
 		b.append(os.path.join(root,filename))
 print(b)
+
+
+
 '''
-
 dict1={'txt0':0,'txt1':1,'txt2':2}
-dict2={'txt0':0,'txt1':1,'txt3':0}
-dir_list = []
+dict2={'txt0':0,'txt2':2}
 
-for key in dict1:
-	try:
+
+#print('txt3' in dict1)
+
+def compare_delete(dict1,dict2):
+	to_delete = []
+	for key in dict1:
 		if key not in dict2:
-			raise Error()#a filedir not in zipped
-		if dict1[key] == dict2[key]:
-			dir_list.append(key)
+			continue
+		elif dict1[key]==dict2[key]:
+			to_delete.append(key)
 
-	except:
+	
+	return to_delete
 
 
-print(dir_list)
+print(compare_delete(dict1,dict2))
