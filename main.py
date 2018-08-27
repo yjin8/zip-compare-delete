@@ -1,16 +1,29 @@
-import os
-import shutil
-import time
-import zipfile
+#usr/bin/env python3
+import os, shutil, time, zipfile
+from datetime import datetime
 
-#7/24/18 - still need to write function to delete files --> using functional programmning
-#		   to filter the files in a specific time frame and then applying a zip function to it
-#		   in other words, applyin map to a filter function (using lambda)
-#7/25/18 - figure out path string formating (.zip or not at end)
-#-------------------------------------------------------#
+#8/22/18 - find a way to run script as administrator		 
+
+def get_year_month():
+	current_time = time.time()
+	month_earlier = current_time - 2592000 
+	t = datetime.fromtimestamp(month_earlier)
+	YEAR_MONTH = "{}-{:02d}".format(t.year, t.month)
+	return YEAR_MONTH
+
+#--------------------------------------------------------------------#
+#																	 #
+#					ENTER DESIRED INFORMATION BELOW					 #
+#																	 #
+#--------------------------------------------------------------------#
 
 DIR_TO_ZIP = "Z:/syslog/149.68.81.76"
-YEAR_MONTH = "2017-10"
+YEAR_MONTH =  get_year_month()
+DESTINATION_DIR = "U:/149.68.81.76/{}".format(YEAR_MONTH)
+
+
+#--------------------------------------------------------------------#
+
 
 def zip_files(orig_path,zip_path):
 	"""
@@ -20,8 +33,6 @@ def zip_files(orig_path,zip_path):
 	shutil.make_archive(zip_path,'zip',orig_path) 
 	#zip_path: e.g. 'U:\\PIX-SF\\2018-05\\2018-05-01' (don't include '.zip' at end of first arg)
 
-#zip_files(filePath0,filePath2)
-
 
 def get_files_to_zip(directory):
 	to_zip = []
@@ -29,20 +40,19 @@ def get_files_to_zip(directory):
 		for directory in directories:
 			path = os.path.join(root,directory)
 			if YEAR_MONTH in path:
-				#print(path)
 				to_zip.append(path)
-				#print(to_zip)
 		return to_zip
 
 def get_zip_paths(path_list):
 	zip_paths = []
 	for path in path_list:
-		zip_paths.append(path.replace("Z:/syslog/149.68.81.76","U:/149.68.81.76/{}".format(YEAR_MONTH)))
+		zip_paths.append(path.replace(DIR_TO_ZIP,DESTINATION_DIR))
 	return zip_paths
+
 
 def get_zipped_size(directory):
 	"""
-	returns size of a zipped folder in mB
+	returns size of a zipped folder in mb
 
 	:param directory: path to zipped folder in string format, WITHOUT ".zip" at end
 
@@ -52,7 +62,6 @@ def get_zipped_size(directory):
 	#zf: an object created from the zipped files
 	size = float(sum([zinfo.file_size for zinfo in zf.filelist])) / 1000000
 	return size
-
 
 def get_orig_size(directory):
 	#returns size of a folder in mB
@@ -66,8 +75,8 @@ def main():
 	files_to_zip = get_files_to_zip(DIR_TO_ZIP)#DIR_TO_ZIP needed!!
 	zip_paths = get_zip_paths(files_to_zip)
 
-	print(files_to_zip)
-	print(zip_paths)
+	#print(files_to_zip)
+	#print(zip_paths)
 
 	log = open("zip_log.txt","w")
 
@@ -75,13 +84,16 @@ def main():
 		for i in range(len(files_to_zip)):
 			orig = files_to_zip[i]
 			zipped = zip_paths[i]
+
+			#zipping the files
 			zip_files(orig,zipped)
 			print("zipped {} to {}".format(orig, zipped))
 			log.write("zipped {} to {}\n".format(orig,zipped))
 
 			'''
+			#deleting the files - requires admin permission
 			if get_orig_size(orig) == get_zipped_size(zipped):
-				print("{} and {} are the same size!".format(orig,zipped))
+				print("{} and {} are both {}mb".format(orig,zipped,get_zipped_size(zipped)))
 				os.remove(orig)
 				print("{} deleted".format(orig))
 				log.write("{} deleted\n".format(orig))
