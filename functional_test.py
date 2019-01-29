@@ -26,22 +26,3 @@ print(b)
 
 
 '''
-dict1={'txt0':0,'txt1':1,'txt2':2}
-dict2={'txt0':0,'txt2':2}
-
-
-#print('txt3' in dict1)
-
-def compare_delete(dict1,dict2):
-	to_delete = []
-	for key in dict1:
-		if key not in dict2:
-			continue
-		elif dict1[key]==dict2[key]:
-			to_delete.append(key)
-
-	
-	return to_delete
-
-
-print(compare_delete(dict1,dict2))

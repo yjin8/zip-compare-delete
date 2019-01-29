@@ -1,10 +1,11 @@
 #usr/bin/env python3
 import os, shutil, time, zipfile
-from datetime import datetime
-
-#8/22/18 - find a way to run script as administrator		 
+from datetime import datetime	 
 
 def get_year_month():
+	'''
+	returns year and month of previous month as a string "YYYY-MM"
+	'''
 	current_time = time.time()
 	month_earlier = current_time - 2592000 
 	t = datetime.fromtimestamp(month_earlier)
@@ -17,9 +18,9 @@ def get_year_month():
 #																	 #
 #--------------------------------------------------------------------#
 
-DIR_TO_ZIP = "Z:/syslog/149.68.81.76"
-YEAR_MONTH =  get_year_month()
-DESTINATION_DIR = "U:/149.68.81.76/{}".format(YEAR_MONTH)
+DIR_TO_ZIP = "Z:\\syslog\\149.68.80.68"
+YEAR_MONTH =  "2018-08"	#either use get_year_month() or "YYYY-MM"
+DESTINATION_DIR = "U:\\149.68.80.68\\{}".format(YEAR_MONTH)
 
 
 #--------------------------------------------------------------------#
@@ -42,6 +43,15 @@ def get_files_to_zip(directory):
 			if YEAR_MONTH in path:
 				to_zip.append(path)
 		return to_zip
+
+# def get_files_to_zip(directory):
+'''
+format for @directory:
+DIR = "Z:\\syslog\\10.98.254.68\\{}*".format(YEAR_MONTH)
+
+'''
+# 	to_zip = glob.glob(directory)
+# 	return to_zip
 
 def get_zip_paths(path_list):
 	zip_paths = []
@@ -78,7 +88,7 @@ def main():
 	#print(files_to_zip)
 	#print(zip_paths)
 
-	log = open("zip_log.txt","w")
+	log = open("zip_log.txt","a")
 
 	if len(files_to_zip) == len(zip_paths):
 		for i in range(len(files_to_zip)):
@@ -86,15 +96,16 @@ def main():
 			zipped = zip_paths[i]
 
 			#zipping the files
+			print("zipping {} to {}.....".format(orig,zipped))
 			zip_files(orig,zipped)
-			print("zipped {} to {}".format(orig, zipped))
+			print("zipped")
 			log.write("zipped {} to {}\n".format(orig,zipped))
 
 			'''
-			#deleting the files - requires admin permission
+			#deleting the files - requires admin permission? -probably not
 			if get_orig_size(orig) == get_zipped_size(zipped):
 				print("{} and {} are both {}mb".format(orig,zipped,get_zipped_size(zipped)))
-				os.remove(orig)
+				shutil.rmtree(orig)
 				print("{} deleted".format(orig))
 				log.write("{} deleted\n".format(orig))
 			'''

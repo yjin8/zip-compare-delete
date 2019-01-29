@@ -1,7 +1,6 @@
 import os
 import shutil
 import zipfile
-from zipfile import ZipFile, ZipInfo
 
 
 def zip_files(orig_path,zip_path):
@@ -19,9 +18,7 @@ def get_files_to_zip(directory):
 		for directory in directories:
 			path = os.path.join(root,directory)
 			if YEAR_MONTH in path:
-				#print(path)
 				to_zip.append(path)
-				#print(to_zip)
 		return to_zip
 
 def get_zip_paths(path_list):
@@ -43,12 +40,13 @@ print(zip_paths)
 #['U:/149.68.81.76/2017-09\\2017-09-01', 'U:/149.68.81.76/2017-09\\2017-09-02',...]
 
 '''
+
 def main():
 
 	files_to_zip = get_files_to_zip(DIR_TO_ZIP)
 	zip_paths = get_zip_paths(files_to_zip)
 
-	log = open("zip_log.txt","w")
+	log = open("zip_log.txt","a")
 
 	if len(files_to_zip) == len(zip_paths):
 		for i in range(len(files_to_zip)):

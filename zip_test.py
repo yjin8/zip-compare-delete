@@ -2,6 +2,7 @@ import os
 from os.path import basename
 from zipfile import ZipFile
 import zipfile
+from zipfile import ZipInfo
 import shutil
 
 filePath0 = 'H:/Documents/work/guestwifi'
@@ -56,7 +57,7 @@ def zip_files_1(orig_path,zip_path):
 
 
 #shutil.make_archive('H:/coding practice/work','zip','H:/Documents/work')
-
+'''
 def get_zipped_files(file_path):
 	"""
 	Constructs a dictionary with (fileName:fileSize) key:value pairs
@@ -79,3 +80,10 @@ def get_zipped_files(file_path):
 
 
 print(get_zipped_files(filePath2))
+'''
+zipped_sizes = {}
+
+zf = ZipInfo.from_file(filePath2, arcname=None)
+print("ZIPPED FILE SIZE")
+zipped_sizes[filePath2] = zf.file_size
+print(zipped_sizes)
