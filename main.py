@@ -18,9 +18,9 @@ def get_year_month():
 #																	 #
 #--------------------------------------------------------------------#
 
-DIR_TO_ZIP = "Z:\\syslog\\149.68.80.68"
-YEAR_MONTH =  "2018-08"	#either use get_year_month() or "YYYY-MM"
-DESTINATION_DIR = "U:\\149.68.80.68\\{}".format(YEAR_MONTH)
+DIR_TO_ZIP = "Z:\\syslog\\149.68.81.76"
+YEAR_MONTH =  "2018-11"
+DESTINATION_DIR = "U:\\149.68.81.76\\{}".format(YEAR_MONTH)
 
 
 #--------------------------------------------------------------------#
@@ -112,4 +112,5 @@ def main():
 		log.close()
 		print("archiving complete")
 
-main()
+if __name__ == "__main__":
+	main()
