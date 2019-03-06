@@ -19,7 +19,7 @@ def get_year_month():
 #--------------------------------------------------------------------#
 
 DIR_TO_ZIP = "Z:\\syslog\\149.68.81.76"
-YEAR_MONTH =  "2018-11"
+YEAR_MONTH =  "2018-12"
 DESTINATION_DIR = "U:\\149.68.81.76\\{}".format(YEAR_MONTH)
 
 
