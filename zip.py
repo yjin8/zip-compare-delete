@@ -2,6 +2,8 @@
 import os, shutil, time, zipfile
 from datetime import datetime	 
 
+#TODO: Progress bars/counters for zipping and deleting
+
 def get_year_month():
 	'''
 	returns year and month of previous month as a string "YYYY-MM"
@@ -18,9 +20,9 @@ def get_year_month():
 #																	 #
 #--------------------------------------------------------------------#
 
-DIR_TO_ZIP = "Z:\\syslog\\149.68.81.76"
-YEAR_MONTH =  "2018-12"
-DESTINATION_DIR = "U:\\149.68.81.76\\{}".format(YEAR_MONTH)
+DIR_TO_ZIP = "Z:\\syslog\\10.98.254.68"
+YEAR_MONTH =  "2019-03"
+DESTINATION_DIR = "U:\\10.98.254.68\\{}".format(YEAR_MONTH)
 
 
 #--------------------------------------------------------------------#
@@ -95,22 +97,34 @@ def main():
 			orig = files_to_zip[i]
 			zipped = zip_paths[i]
 
-			#zipping the files
-			print("zipping {} to {}.....".format(orig,zipped))
-			zip_files(orig,zipped)
-			print("zipped")
-			log.write("zipped {} to {}\n".format(orig,zipped))
-
-			'''
-			#deleting the files - requires admin permission? -probably not
-			if get_orig_size(orig) == get_zipped_size(zipped):
-				print("{} and {} are both {}mb".format(orig,zipped,get_zipped_size(zipped)))
-				shutil.rmtree(orig)
-				print("{} deleted".format(orig))
-				log.write("{} deleted\n".format(orig))
-			'''
-		log.close()
-		print("archiving complete")
+			if os.path.isfile(zipped+".zip"):
+				if get_orig_size(orig) <= get_zipped_size(zipped):
+					print("deleting {}".format(orig))
+					shutil.rmtree(orig)
+					log.write("{} deleted\n".format(orig))
+				else:
+					print("zipping {} to {}.....".format(orig,zipped))
+					zip_files(orig,zipped)
+					print("zipped")
+					log.write("zipped {} to {}\n".format(orig,zipped))
+					if get_orig_size(orig) == get_zipped_size(zipped):
+						print("deleting {}".format(orig))
+						shutil.rmtree(orig)
+						print("deleted")
+						log.write("{} deleted\n".format(orig))
+			else:
+				print("zipping {} to {}.....".format(orig,zipped))
+				zip_files(orig,zipped)
+				print("zipped")
+				log.write("zipped {} to {}\n".format(orig,zipped))
+				#deleting the files
+				if get_orig_size(orig) == get_zipped_size(zipped):
+					print("deleting {}".format(orig))
+					shutil.rmtree(orig)
+					print("deleted")
+					log.write("{} deleted\n".format(orig))
+	log.close()
+	print("archiving complete")
 
 if __name__ == "__main__":
 	main()
